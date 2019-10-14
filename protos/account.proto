@@ -1,0 +1,58 @@
+syntax = "proto3";
+
+package protos;
+
+import "google/protobuf/timestamp.proto";
+
+// DEVELOPERS NOTE:
+// export GO_PATH=~/go
+// export PATH=$PATH:/$GO_PATH/bin
+// export PATH=$PATH:$GOPATH/bin
+// $ cd ~/go/src/github.com/growlog/rpc
+// $ protoc --go_out=plugins=grpc:. protos/account.proto
+
+service Account {
+    rpc Login (LoginRequest) returns (LoginResponse) {}
+    rpc VerifyAccessToken (VerifyAccessTokenRequest) returns (VerifyAccessTokenResponse) {}
+    rpc RefreshAccessToken (RefreshAccessTokenRequest) returns (RefreshAccessTokenResponse) {}
+    // https://grpc.io/docs/tutorials/basic/go/
+}
+
+// --- LOGIN ---
+
+message LoginRequest {
+    string email = 1;
+    string password = 2;
+}
+
+message LoginResponse {
+    bool status = 1;
+    string token = 2;
+}
+
+// --- VERIFY ACCESS TOKEN ---
+
+message VerifyAccessTokenRequest {
+    string token = 1;
+}
+
+message VerifyAccessTokenResponse {
+    bool status = 1;
+    int64 user_id = 2;
+    int64 thing_id = 3;
+    google.protobuf.Timestamp expires_at = 4;
+}
+
+
+// --- REFRESH ACCESS TOKEN ---
+
+message RefreshAccessTokenRequest {
+    string token = 1;
+}
+
+message RefreshAccessTokenResponse {
+    bool status = 1;
+    int64 user_id = 2;
+    int64 thing_id = 3;
+    google.protobuf.Timestamp expires_at = 4;
+}

@@ -1,0 +1,63 @@
+syntax = "proto3";
+
+package protos;
+
+import "google/protobuf/timestamp.proto";
+
+// DEVELOPERS NOTE:
+// export GO_PATH=~/go
+// export PATH=$PATH:/$GO_PATH/bin
+// export PATH=$PATH:$GOPATH/bin
+// $ cd ~/go/src/github.com/growlog/rpc
+// $ protoc --go_out=plugins=grpc:. protos/thing.proto
+
+service Thing {
+    rpc SetTimeSeriesData (SetTimeSeriesDataRequest) returns (SetTimeSeriesDataResponse) {}
+    rpc SetSensor (SetSensorRequest) returns (SetSensorResponse) {}
+    rpc SetThing (SetThingRequest) returns (SetThingResponse) {}
+    // https://grpc.io/docs/tutorials/basic/go/
+}
+
+// --- SetTimeSeriesData ---
+
+message SetTimeSeriesDatumRequest {
+    int64 tenant_id = 1;
+    int64 sensor_id = 2;
+    double value = 3;
+    google.protobuf.Timestamp timestamp = 4;
+}
+
+message SetTimeSeriesDataRequest {
+    repeated SetTimeSeriesDatumRequest data = 1;
+}
+
+message SetTimeSeriesDataResponse {
+    bool status = 1;
+    string message = 2;
+}
+
+// --- SetSensor ---
+
+message SetSensorRequest {
+    int64 tenant_id = 1;
+    int64 thing_id = 2;
+    int32 type_id = 3;
+}
+
+message SetSensorResponse {
+    bool status = 1;
+    string message = 2;
+}
+
+// --- SetThing ---
+
+message SetThingRequest {
+    int64 tenant_id = 1;
+    int64 user_id = 2;
+    string name = 3;
+}
+
+message SetThingResponse {
+    bool status = 1;
+    string message = 2;
+}
